@@ -1,0 +1,24 @@
+package rules
+ 
+import com.javainuse.model.GenericKubernetesParams
+
+rule "Check YAML Params"
+	when
+		gkParams : GenericKubernetesParams()
+	then
+		gkParams.setResult( gkParams.getValueAsString("env") == "PROD" );
+	end
+
+rule "Can Deploy"
+	when 
+		gkParams : GenericKubernetesParams(cmd=="execute")
+	then
+		/*
+			Set name of plugin for custom logic
+		*/
+		gkParams.setWorkerName("success.worker");
+		/*
+			
+		*/
+		gkParams.setConditionalResult(gkParams.doWorkResult());
+	end
